@@ -11,9 +11,20 @@ function isMethodPOST(): bool
     return true;
 }
 
-function getAllTasks($mysqli): array
+
+function getAllPosts($mysqli): array
 {
-    $sql = "SELECT * FROM tasks";
+    $sql = "SELECT
+        posts.id AS id,
+        posts.name AS name,
+        posts.text AS text,
+        posts.views AS views,
+        posts.status AS status,
+        posts.image AS image,
+        categories.name AS category_name
+FROM
+        posts
+        JOIN categories ON posts.category_id = categories.id;";
     if (!$result = mysqli_query($mysqli, $sql)) {
         $_SESSION['error'] = "Ошибка вывода задач: " . mysqli_error($mysqli);
         exit();
@@ -21,9 +32,11 @@ function getAllTasks($mysqli): array
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
-function getTaskStatus($mysqli, $task_id): bool
+
+
+function getPostStatus($mysqli, $post_id): bool
 {
-    $sql = "SELECT `status` FROM tasks WHERE id = '$task_id'";
+    $sql = "SELECT `status` FROM posts WHERE id = '$post_id'";
     if (!$result = mysqli_query($mysqli, $sql)) {
         $_SESSION['error'] = "Ошибка вывода задач: " . mysqli_error($mysqli);
         exit();
@@ -31,9 +44,9 @@ function getTaskStatus($mysqli, $task_id): bool
     return !mysqli_fetch_row($result)[0] == 0;
 }
 
-function createTask($name, $date, $mysqli): bool
+function createPost($name, $text, $category_id, $views, $status, $image, $mysqli): bool
 {
-    $sql = "INSERT INTO `tasks` (`id`, `name`, `status`, `date`) VALUES (NULL, '{$name}', '0' , '{$date}')";
+    $sql = "INSERT INTO `posts` (`id`, `name`, `text`, `category_id`, `views`, `status`, `image`) VALUES (NULL, '{$name}', '0' , '{$text}', '{$category_id}', '{$views}', '{$status}', '{$image}')";
     if (!$result = mysqli_query($mysqli, $sql)) {
         $_SESSION['error'] = "Ошибка записи задачи: " . mysqli_error($mysqli);
         return false;
