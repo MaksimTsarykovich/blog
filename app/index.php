@@ -16,10 +16,10 @@
         Список статей</h1>
 
     <div class="relative overflow-x-auto w-[85%] sm:rounded-lg mx-auto mt-9">
-        <a href="17.table_2_create.html"
+        <a href="public/post/post_create.php"
             class="inline-block focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Добавить
             статью</a>
-        <a href="17.table_2_category_list.html"
+        <a href="/public/category/category_list.php"
             class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Категории</a>
     </div>
     <div class="relative overflow-x-auto shadow-md w-[85%] sm:rounded-lg mx-auto mt-9">
@@ -91,7 +91,7 @@
                             <img src="/public<?= $post['image'] ?>" class="w-[100px]" alt="">
                         </td>
                         <td class="px-6 py-4 flex">
-                            <a href="17.table_2_edit.html" class="p-1" title="Редактировать">
+                            <a href="/public/post/post_edit.php?id=<?= $post['id'] ?>" class="p-1" title="Редактировать">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                     viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -99,7 +99,7 @@
                                         d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
                                 </svg>
                             </a>
-                            <a href="#" class="p-1" title="Удалить" onClick="return confirm('Вы уверены?')">
+                            <a href="/includes/post/delete_post.php?id=<?= $post['id'] ?>" class="p-1" title="Удалить" onClick="return confirm('Вы уверены?')">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                     viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"

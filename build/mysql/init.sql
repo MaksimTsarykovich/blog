@@ -1,41 +1,45 @@
-CREATE TABLE
-        categories (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                name VARCHAR(255) NOT NULL
-        );
+CREATE TABLE categories (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        post_count INT NOT NULL DEFAULT 0
+);
+
+INSERT INTO
+        `categories` (`id`, `name`, `post_count`)
+VALUES
+        (NULL, 'Мой опыт', 1);
+
+INSERT INTO
+        `categories` (`id`, `name`, `post_count`)
+VALUES
+        (NULL, 'Разработка', 1);
+
+INSERT INTO
+        `categories` (`id`, `name`, `post_count`)
+VALUES
+        (NULL, 'PHP', 1);
+
+INSERT INTO
+        `categories` (`id`, `name`, `post_count`)
+VALUES
+        (NULL, 'Фриланс', 1);
 
 INSERT INTO
         `categories` (`id`, `name`)
 VALUES
-        (NULL, 'Мой опыт');
+        (NULL, 'Без категории');
 
-INSERT INTO
-        `categories` (`id`, `name`)
-VALUES
-        (NULL, 'Разработка');
-
-INSERT INTO
-        `categories` (`id`, `name`)
-VALUES
-        (NULL, 'PHP');
-
-INSERT INTO
-        `categories` (`id`, `name`)
-VALUES
-        (NULL, 'Фриланс');
-
-CREATE TABLE
-        posts (
-                `id` INT NOT NULL AUTO_INCREMENT,
-                `name` VARCHAR(255) NOT NULL,
-                `text` TEXT NOT NULL,
-                `category_id` INT NOT NULL,
-                `views` INT NOT NULL,
-                `status` TINYINT (1) NOT NULL DEFAULT '1',
-                `image` VARCHAR(255) NOT NULL,
-                PRIMARY KEY (`id`),
-                FOREIGN KEY (`category_id`) REFERENCES categories (`id`)
-        );
+CREATE TABLE posts (
+        `id` INT NOT NULL AUTO_INCREMENT,
+        `name` VARCHAR(255) NOT NULL,
+        `text` TEXT NOT NULL,
+        `category_id` INT NOT NULL,
+        `views` INT NOT NULL,
+        `status` TINYINT (1) NOT NULL DEFAULT '1',
+        `image` VARCHAR(255) NULL,
+        PRIMARY KEY (`id`),
+        FOREIGN KEY (`category_id`) REFERENCES categories (`id`)
+);
 
 INSERT INTO
         `posts` (
@@ -120,4 +124,3 @@ VALUES
                 1,
                 '/images/image-4.jpg'
         );
-
