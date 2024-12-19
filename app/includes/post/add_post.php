@@ -1,9 +1,9 @@
 <?php
 require_once('../functions.php');
 
-isMethodPOST() ? null : redirectToCreatePostPage();
+isMethodPOST() ? null : redirectTo("/public/post/post_create.php");
 
 
-createPost($_POST['name'], $_POST['text'], $mysqli) ? null : redirectToCreatePostPage();
+createPost($_POST['name'], $_POST['text'], $mysqli) ? null : redirectTo("/public/post/post_create.php");
 
-redirectToHomePage();
+redirectTo("/");

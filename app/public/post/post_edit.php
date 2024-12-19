@@ -17,7 +17,7 @@
 
     <div class="max-w-2xl mx-auto">
         <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
-            <a href="/" class="mb-5 font-medium text-sm inline-flex items-center text-blue-500 hover:text-blue-800">
+            <a href="post_show.php?id=<?= $_GET['id'] ?>" class="mb-5 font-medium text-sm inline-flex items-center text-blue-500 hover:text-blue-800">
                 <svg class="mr-1 -ml-1 w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                     viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

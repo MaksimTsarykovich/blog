@@ -11,7 +11,6 @@ function isMethodPOST(): bool
     return true;
 }
 
-
 function getAllPosts($mysqli): array
 {
     $sql = "SELECT
@@ -42,8 +41,6 @@ function getAllCategories($mysqli): array
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
-
-
 function getPostStatus($mysqli, $post_id): bool
 {
     $sql = "SELECT `status` FROM posts WHERE id = '$post_id'";
@@ -72,6 +69,47 @@ function getPostText($mysqli, $post_id): string
         exit();
     }
     return mysqli_fetch_assoc($result)["text"];
+}
+
+function getPostCategory($mysqli, $post_id): string
+{
+    $sql = "SELECT
+        posts.id AS id,
+        posts.name AS name,
+        posts.text AS text,
+        posts.views AS views,
+        posts.status AS status,
+        posts.image AS image,
+        categories.name AS category_name
+    FROM
+        posts
+    JOIN categories ON posts.category_id = categories.id
+    WHERE posts.id = {$post_id};";
+    if (!$result = mysqli_query($mysqli, $sql)) {
+        $_SESSION['error'] = "Ошибка вывода названия категории: " . mysqli_error($mysqli);
+        exit();
+    }
+    return mysqli_fetch_assoc($result)["category_name"];
+}
+
+function getPostImage($mysqli, $post_id): string
+{
+    $sql = "SELECT `image` FROM posts WHERE id = '$post_id'";
+    if (!$result = mysqli_query($mysqli, $sql)) {
+        $_SESSION['error'] = "Ошибка вывода текста статьи: " . mysqli_error($mysqli);
+        exit();
+    }
+    return mysqli_fetch_assoc($result)["image"];
+}
+
+function getPostViews($mysqli, $post_id): string
+{
+    $sql = "SELECT `views` FROM posts WHERE id = '$post_id'";
+    if (!$result = mysqli_query($mysqli, $sql)) {
+        $_SESSION['error'] = "Ошибка вывода текста статьи: " . mysqli_error($mysqli);
+        exit();
+    }
+    return mysqli_fetch_assoc($result)["views"];
 }
 
 function createPost($name, $text, $mysqli): bool
@@ -110,7 +148,7 @@ function updatePost($id, $name, $text, $mysqli): bool
     return executeQueryWithFeedback("Ошибка обновления статьи ", "Статья успешно обновлена ", $sql, $mysqli);
 }
 
-function executeQueryWithFeedback($descriptionError, $descriptionSuccess, $sql, $mysqli): bool
+function executeQueryWithFeedback(string $descriptionError, string $descriptionSuccess, $sql, $mysqli): bool
 {
     if (!mysqli_query($mysqli, $sql)) {
         $_SESSION['error'] = $descriptionError . mysqli_error($mysqli);
@@ -120,70 +158,18 @@ function executeQueryWithFeedback($descriptionError, $descriptionSuccess, $sql, 
     return true;
 }
 
-
-
-function editTask($name, $date, $id, $mysqli): bool
+function switchTaskStatus($mysqli, $post_id): bool
 {
-    $sql = "UPDATE `tasks` SET `name` = '{$name}', `date` = '{$date}' WHERE `tasks`.`id` = '{$id}'";
-    if (!mysqli_query($mysqli, $sql)) {
-        $_SESSION['error'] = "Ошибка обновления задачи " . mysqli_error($mysqli);
-        return false;
-    }
-    return true;
-}
-
-function switchTaskStatus($mysqli, $task_id): bool
-{
-    if (getTaskStatus($mysqli, $task_id)) {
-        $sql = "UPDATE `tasks` SET `status` = '0' WHERE `tasks`.`id` = '$task_id'";
+    if (getPostStatus($mysqli, $post_id)) {
+        $sql = "UPDATE `posts` SET `status` = '0' WHERE `posts`.`id` = '$post_id'";
     } else {
-        $sql = "UPDATE `tasks` SET `status` = '1' WHERE `tasks`.`id` = '$task_id'";
+        $sql = "UPDATE `posts` SET `status` = '1' WHERE `posts`.`id` = '$post_id'";
     }
-    if (!mysqli_query($mysqli, $sql)) {
-        $_SESSION['error'] = "Ошибка обновления задачи " . mysqli_error($mysqli);
-        return false;
-    }
-    return true;
+    return executeQueryWithFeedback("Ошибка обновления статуса статьи ", "Статус статьи успешно обновлен ", $sql, $mysqli);
 }
 
-function redirectToHomePage(): void
+function redirectTo(string $url): void
 {
-    header("Location: /");
-    exit();
-}
-
-function redirectToEditPage(): void
-{
-    header("Location: /public/post/post_edit.php");
-    exit();
-}
-
-function redirectToCreatePostPage(): void
-{
-    header("Location: /public/post/post_create.php");
-    exit();
-}
-
-function redirectToEditPostPage(): void
-{
-    header("Location: /public/post/post_edit.php");
-    exit();
-}
-
-function redirectToCreateCategoryPage(): void
-{
-    header("Location: /public/category/category_create.php");
-    exit();
-}
-
-function redirectToCategoryPage(): void
-{
-    header("Location: /public/category/category_list.php");
-    exit();
-}
-
-function redirectToEditCategoryPage(): void
-{
-    header("Location: /public/category/category_edit.php");
-    exit();
+    header("Location: " . $url);
+    exit;
 }

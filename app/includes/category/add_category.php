@@ -1,9 +1,8 @@
 <?php
 require_once('../functions.php');
 
-isMethodPOST() ? null : redirectToCategoryPage();
-
+isMethodPOST() ? null : redirectTo("/public/category/category_list.php");
 
 createCategory($_POST['name'], $mysqli);
 
-redirectToCategoryPage();
+redirectTo("/public/category/category_list.php");

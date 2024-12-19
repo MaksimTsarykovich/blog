@@ -58,7 +58,7 @@
                         class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                         <?php ?>
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            <a href="17.table_2_show.html">
+                            <a href="/public/post/post_show.php?id=<?= $post['id'] ?>">
                                 <?= $post['name'] ?>
                             </a>
 
