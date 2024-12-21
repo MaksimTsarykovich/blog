@@ -88,7 +88,7 @@
                         </td>
 
                         <td class="px-6 py-4">
-                            <img src="/public<?= $post['image'] ?>" class="w-[100px]" alt="">
+                            <img src="/public/images/<?= $post['image'] ?>" class="w-[100px]" alt="">
                         </td>
                         <td class="px-6 py-4 flex">
                             <a href="/public/post/post_edit.php?id=<?= $post['id'] ?>" class="p-1" title="Редактировать">

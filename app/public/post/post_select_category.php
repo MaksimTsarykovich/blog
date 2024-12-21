@@ -20,7 +20,7 @@
                 <svg class="mr-1 -ml-1 w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4" />
                 </svg>
-                <?= getPostCategory($mysqli, $_GET['id']) ?>
+                <?= getPostName($mysqli, $_GET['id']) ?>
             </a>
             <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
                 <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
@@ -28,19 +28,20 @@
                         Изменить категорию
                     </h3>
                 </div>
-                <form action="../../includes/category/update_category.php" method="post" >
+                <form action="../../includes/category/update_selected_category.php" method="post">
                     <div class="mb-4">
                         <div>
                             <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Выберите категорию</label>
-                            <select name="name" id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                            <select name="categoryId" id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 
-                                <option selected value=""><?= getPostCategory($mysqli, $_GET['id']) ?></option>
-                                <?php foreach (getAllCategories($mysqli) as $category): ?>
-                                    <?php if ($category['id'] == $_GET['id']) break; ?>
-                                    <option value=""><?= $category['name'] ?></option>
-                                <?php endforeach; ?>
+                            <option value="" disabled selected><?= getPostCategory($mysqli, $_GET['id']) ?></option>
+                            <?php foreach (getAllCategories($mysqli) as $category): ?>
+                                <?php if ($category['id'] == $_GET['id']) continue; ?>
+                                <option value="<?= $category['id'] ?>"><?= $category['name'] ?></option>
+                            <?php endforeach; ?>
                             </select>
-                            <input type="hidden" value="<?= $_GET['id'] ?>" name="id">
+
+                            <input type="hidden" value="<?= $_GET['id'] ?>" name="postId">
                         </div>
                     </div>
                     <button type="submit" class="text-white inline-flex items-center bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:focus:ring-yellow-900">

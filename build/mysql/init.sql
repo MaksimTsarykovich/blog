@@ -59,7 +59,7 @@ VALUES
                 1,
                 83,
                 1,
-                '/images/image-1.jpg'
+                'image-1.jpg'
         );
 
 INSERT INTO
@@ -80,7 +80,7 @@ VALUES
                 2,
                 129,
                 0,
-                '/images/image-2.jpg'
+                'image-2.jpg'
         );
 
 INSERT INTO
@@ -89,19 +89,14 @@ INSERT INTO
                 `name`,
                 `text`,
                 `category_id`,
-                `views`,
-                `status`,
-                `image`
-        )
-VALUES
-        (
+                `views`,uery = "UPDATE posts SET views = vi
                 NULL,
                 'Мой любимый инструментарий PHP-разработчика',
                 'Делюсь своим набором инструментов — IDE, фреймворки, библиотеки, сервисы, — которые помогают мне быть более продуктивным и эффективным в работе.',
                 3,
                 322,
                 0,
-                '/images/image-3.jpg'
+                'image-3.jpg'
         );
 
 INSERT INTO
@@ -122,5 +117,5 @@ VALUES
                 4,
                 218,
                 1,
-                '/images/image-4.jpg'
+                'image-4.jpg'
         );

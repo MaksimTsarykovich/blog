@@ -3,6 +3,6 @@ require_once('../functions.php');
 
 isMethodPOST() ? null : redirectTo("/public/category/category_edit.php");
 
-updateCategory($_POST['id'], $_POST['name'], $mysqli);
+updateCategory($_POST['postId'], $_POST['categoryId'], $mysqli);
 
-redirectTo("/public/post/post_selected_category.php");
+redirectTo("/public/post/post_select_category.php?id=".$_POST['postId']);

@@ -1,4 +1,7 @@
-<?php require_once("../../includes/functions.php") ?>
+<?php 
+require_once("../../includes/functions.php");
+incrementViewCount($_GET['id'],$mysqli);
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -61,9 +64,6 @@
                     <?php endif; ?>
                 </a>
 
-
-
-
                 <a href="post_edit.php?id=<?= $_GET['id'] ?>" class="inline-flex items-center text-white ml-0 bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-yellow-900">
                     <svg aria-hidden="true" class="mr-1 -ml-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                         <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path>
@@ -115,11 +115,12 @@
                 </div>
             </dl>
             <h2 class="mb-2 mt-5 text-xl font-semibold leading-none text-gray-900 md:text-2xl dark:text-white"><?= getPostName($mysqli, $_GET['id']) ?> </h2>
-            <img src="/public<?= getPostImage($mysqli, $_GET['id']) ?>" alt="">
+            <img src="/public/images/<?= getPostImage($mysqli, $_GET['id']) ?>" alt="">
             <dl class="mt-5">
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Полный текст</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">
                     <?= getPostText($mysqli, $_GET['id']) ?>
+                    
                 </dd>
             </dl>
 

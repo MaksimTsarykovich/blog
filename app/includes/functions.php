@@ -4,7 +4,7 @@ require_once('config.php');
 
 function isMethodPOST(): bool
 {
-    if (!$_SERVER["REQUEST_METHOD"] == "POST") {
+    if (!$_SERVER["REQUEST_METHOD"] === "POST") {
         $_SESSION['error'] = "Неверный метод запроса";
         return false;
     }
@@ -41,9 +41,9 @@ function getAllCategories($mysqli): array
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
-function getPostStatus($mysqli, $post_id): bool
+function getPostStatus($mysqli, $postId): bool
 {
-    $sql = "SELECT `status` FROM posts WHERE id = '$post_id'";
+    $sql = "SELECT `status` FROM posts WHERE id = '$postId'";
     if (!$result = mysqli_query($mysqli, $sql)) {
         $_SESSION['error'] = "Ошибка вывода статуса статьи: " . mysqli_error($mysqli);
         exit();
@@ -51,9 +51,9 @@ function getPostStatus($mysqli, $post_id): bool
     return !mysqli_fetch_row($result)[0] == 0;
 }
 
-function getPostName($mysqli, $post_id): string
+function getPostName($mysqli, $postId): string
 {
-    $sql = "SELECT `name` FROM posts WHERE id = '$post_id'";
+    $sql = "SELECT `name` FROM posts WHERE id = '$postId'";
     if (!$result = mysqli_query($mysqli, $sql)) {
         $_SESSION['error'] = "Ошибка вывода имени статьи: " . mysqli_error($mysqli);
         exit();
@@ -61,9 +61,9 @@ function getPostName($mysqli, $post_id): string
     return mysqli_fetch_assoc($result)["name"];
 }
 
-function getPostText($mysqli, $post_id): string
+function getPostText($mysqli, $postId): string
 {
-    $sql = "SELECT `text` FROM posts WHERE id = '$post_id'";
+    $sql = "SELECT `text` FROM posts WHERE id = '$postId'";
     if (!$result = mysqli_query($mysqli, $sql)) {
         $_SESSION['error'] = "Ошибка вывода текста статьи: " . mysqli_error($mysqli);
         exit();
@@ -71,7 +71,7 @@ function getPostText($mysqli, $post_id): string
     return mysqli_fetch_assoc($result)["text"];
 }
 
-function getPostCategory($mysqli, $post_id): string
+function getPostCategory($mysqli, $postId): string
 {
     $sql = "SELECT
         posts.id AS id,
@@ -84,7 +84,7 @@ function getPostCategory($mysqli, $post_id): string
     FROM
         posts
     JOIN categories ON posts.category_id = categories.id
-    WHERE posts.id = {$post_id};";
+    WHERE posts.id = {$postId};";
     if (!$result = mysqli_query($mysqli, $sql)) {
         $_SESSION['error'] = "Ошибка вывода названия категории: " . mysqli_error($mysqli);
         exit();
@@ -92,9 +92,9 @@ function getPostCategory($mysqli, $post_id): string
     return mysqli_fetch_assoc($result)["category_name"];
 }
 
-function getPostImage($mysqli, $post_id): string
+function getPostImage($mysqli, $postId): string
 {
-    $sql = "SELECT `image` FROM posts WHERE id = '$post_id'";
+    $sql = "SELECT `image` FROM posts WHERE id = '$postId'";
     if (!$result = mysqli_query($mysqli, $sql)) {
         $_SESSION['error'] = "Ошибка вывода текста статьи: " . mysqli_error($mysqli);
         exit();
@@ -102,9 +102,9 @@ function getPostImage($mysqli, $post_id): string
     return mysqli_fetch_assoc($result)["image"];
 }
 
-function getPostViews($mysqli, $post_id): string
+function getPostViews($mysqli, $postId): string
 {
-    $sql = "SELECT `views` FROM posts WHERE id = '$post_id'";
+    $sql = "SELECT `views` FROM posts WHERE id = '$postId'";
     if (!$result = mysqli_query($mysqli, $sql)) {
         $_SESSION['error'] = "Ошибка вывода текста статьи: " . mysqli_error($mysqli);
         exit();
@@ -132,13 +132,34 @@ function deletePost($id, $mysqli): bool
 
 function deleteCategory($id, $mysqli): bool
 {
-    $sql = "DELETE FROM `categories` WHERE `id` = '$id'";
+    if ($id == 5) {
+        $_SESSION['error'] = "Нельзя удалить эту категорию:";
+        return false;
+    }
+    $sql = "SELECT `post_count` FROM `categories` WHERE `id` = '{$id}'";
+    if (!$result = mysqli_query($mysqli, $sql)) {
+        $_SESSION['error'] = "Ошибка переноса числа кол-ва статей: " . mysqli_error($mysqli);
+        exit();
+    }
+    $postCountOld = mysqli_fetch_assoc($result)["post_count"];
+
+    $sql = "UPDATE `categories` SET `post_count` = `post_count` + '{$postCountOld}' WHERE id = 5;";
+    executeQueryWithFeedback("Ошибка выставкления статуса 'Без категории' для статьи ", "Статус успешно обновлен ", $sql, $mysqli) ? null : exit();
+
+    $sql = "UPDATE `posts` SET `category_id` = 5 WHERE `id` = '{$id}'";
+    executeQueryWithFeedback("Ошибка выставкления статуса 'Без категории' для статьи ", "Статус успешно обновлен ", $sql, $mysqli) ? null : exit();
+
+    $sql = "DELETE FROM `categories` WHERE `id` = '{$id}'";
     return executeQueryWithFeedback("Ошибка удаления категории ", "Категория успешно удалена ", $sql, $mysqli);
 }
 
-function updateCategory($id, $name, $mysqli): bool
+function updateCategory($postId, $categoryId, $mysqli): bool
 {
-    $sql = "UPDATE `categories` SET `name` = '{$name}' WHERE `categories`.`id` = '{$id}'";
+    if ($categoryId == 5) {
+        $_SESSION['error'] = "Нельзя обновить эту категорию:";
+        return false;
+    }
+    $sql = "UPDATE `posts` SET `category_id` = '{$categoryId}' WHERE `id` = '{$postId}'";
     return executeQueryWithFeedback("Ошибка обновления категории ", "Категория успешно обновлена ", $sql, $mysqli);
 }
 
@@ -158,14 +179,45 @@ function executeQueryWithFeedback(string $descriptionError, string $descriptionS
     return true;
 }
 
-function switchTaskStatus($mysqli, $post_id): bool
+function switchPostStatus($mysqli, $postId): bool
 {
-    if (getPostStatus($mysqli, $post_id)) {
-        $sql = "UPDATE `posts` SET `status` = '0' WHERE `posts`.`id` = '$post_id'";
+    if (getPostStatus($mysqli, $postId)) {
+        $sql = "UPDATE `posts` SET `status` = '0' WHERE `posts`.`id` = '$postId'";
     } else {
-        $sql = "UPDATE `posts` SET `status` = '1' WHERE `posts`.`id` = '$post_id'";
+        $sql = "UPDATE `posts` SET `status` = '1' WHERE `posts`.`id` = '$postId'";
     }
     return executeQueryWithFeedback("Ошибка обновления статуса статьи ", "Статус статьи успешно обновлен ", $sql, $mysqli);
+}
+function isImageValid($fileSize, $fileType): bool
+{
+    if (empty($fileSize)) {
+        $_SESSION['error'] = "Выберете изображения";
+        return false;
+    }
+    if (!($fileType == "image/jpeg" || $fileType == "image/png")) {
+        $_SESSION['error'] = "Можно загрузить изображение только в формате .jpg и .png";
+        return false;
+    }
+    return true;
+}
+
+function saveImage($fileName, $fileTmpName, $mysqli): bool
+{
+    $upLoadDir = dirname(__DIR__, 2) . '/public/public/images/';
+    $upLoadFile = $upLoadDir . basename($fileName);
+    return move_uploaded_file($fileTmpName, $upLoadFile);
+}
+
+function updatePostImage($postId, $imageName, $mysqli): bool
+{
+    $sql = "UPDATE `posts` SET `image` = '{$imageName}' WHERE `id` = '{$postId}'";
+    return executeQueryWithFeedback("Ошибка обновления изображение ", "Изображение успешно обновлено ", $sql, $mysqli);
+}
+
+function incrementViewCount($postId, $mysqli):void 
+{
+    $sql = "UPDATE `posts` SET `views` = `views` + 1 WHERE id = '{$postId}'";
+    mysqli_query($mysqli, $sql) ? null : $_SESSION['error'] = "Ошибка обновления счетчика просмотров" . mysqli_error($mysqli);
 }
 
 function redirectTo(string $url): void
