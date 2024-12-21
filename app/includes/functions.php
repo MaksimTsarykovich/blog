@@ -114,7 +114,7 @@ function getPostViews($mysqli, $postId): string
 
 function createPost($name, $text, $mysqli): bool
 {
-    $sql = "INSERT INTO `posts` (`id`, `name`, `text`, `category_id`, `views`, `status`, `image`) VALUES (NULL, '{$name}','{$text}', 5,  0, 1, NULL)";
+    $sql = "INSERT INTO `posts` (`id`, `name`, `text`, `category_id`, `views`, `status`, `image`) VALUES (NULL, '{$name}','{$text}', 5,  0, 1, 'default-image.jpg')";
     return executeQueryWithFeedback("Ошибка создания статьи ", "Статьи успешно создана ", $sql, $mysqli);
 }
 

@@ -36,7 +36,7 @@ CREATE TABLE posts (
         `category_id` INT NOT NULL,
         `views` INT NOT NULL,
         `status` TINYINT (1) NOT NULL DEFAULT '1',
-        `image` VARCHAR(255) NULL,
+        `image` VARCHAR(255) NOT NULL DEFAULT 'default-image.jpg',
         PRIMARY KEY (`id`),
         FOREIGN KEY (`category_id`) REFERENCES categories (`id`)
 );
@@ -85,12 +85,15 @@ VALUES
 
 INSERT INTO
         `posts` (
-                `id`,
                 `name`,
                 `text`,
                 `category_id`,
-                `views`,uery = "UPDATE posts SET views = vi
-                NULL,
+                `views`,
+                `status`,
+                `image`
+        )
+VALUES
+        (
                 'Мой любимый инструментарий PHP-разработчика',
                 'Делюсь своим набором инструментов — IDE, фреймворки, библиотеки, сервисы, — которые помогают мне быть более продуктивным и эффективным в работе.',
                 3,
@@ -98,6 +101,7 @@ INSERT INTO
                 0,
                 'image-3.jpg'
         );
+
 
 INSERT INTO
         `posts` (

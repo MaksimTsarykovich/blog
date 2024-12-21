@@ -6,7 +6,7 @@ services:
     container_name: php
     volumes:
       - ./app/:/var/www/html/public
-      - ./php.ini:/usr/local/etc/php/php.ini
+      - ./build/php/php.ini:/usr/local/etc/php/php.ini
     ports:
       - "9000:9000"
     networks:
